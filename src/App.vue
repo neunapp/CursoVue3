@@ -5,20 +5,21 @@
   import ListContacts from './components/ListContacts.vue';
   //
   import { getAllContacts } from './services/apiContacs';
-  //
-  const listContacts = ref(getAllContacts())
+  import { useListaContacs } from './composables/useListaContacs';
+  // states
+  const { contactList } = useListaContacs()
 
   const title = 'Mi Agenda - Lista de contactos'
 
   const clearList = (newList) => {
-    listContacts.value = newList
+    contactList.value = newList
   }
 
   const filterListContact = (kword) => {
     if (kword.trim() === '') {
-      listContacts.value = getAllContacts()
+      contactList.value = getAllContacts()
     }
-    listContacts.value = listContacts.value.filter(
+    contactList.value = contactList.value.filter(
       (contact) => {
         return contact.name.toLowerCase().includes(kword.toLowerCase())
       }
@@ -30,13 +31,11 @@
 <template>
   <div class="flex items-center flex-col p-5">
     <h1 class="text-xl m-4"> {{ title }} </h1>
-    <search-contacs 
-      :listContact="listContacts"
+    <search-contacs
       @filterContact="filterListContact"/>
     
     <list-contacts 
-      title="Lista de Resultados"
-      :listContact="listContacts" />
+      title="Lista de Resultados"/>
 
     <div>
       <button 

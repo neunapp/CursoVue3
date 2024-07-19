@@ -1,10 +1,9 @@
 <script setup>
   // improts
   import { ref, reactive } from 'vue';
-  // pros
-  const props = defineProps({
-    listContact: Array,
-  })
+  //
+  import { useListaContacs } from '../composables/useListaContacs';
+
   // emits
   const emit = defineEmits(['filterContact',])
   // states
@@ -13,6 +12,8 @@
     'color': 'blank'
   })
   const kword = ref('')
+  // composables
+  const { msjEmpy, showEmpy } = useListaContacs()
 
   // methods
   const isFocus = () => {
@@ -22,6 +23,7 @@
   }
 
   const filtrarDatos = () => {
+    showEmpy('Pruebe otra palabra')
     emit('filterContact', kword.value)
   }
   
@@ -43,4 +45,5 @@
       @click="$emit('searchContacts')"
       >Buscar</button>
   </div>
+  <p class="text-red-500">{{ msjEmpy  }}</p>
 </template>

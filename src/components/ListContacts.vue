@@ -1,27 +1,38 @@
 <script setup>
-	import { computed } from 'vue';
+	import { computed, watch, watchEffect } from 'vue';
 	// imports
+	import { useListaContacs } from '../composables/useListaContacs';
 	import BtnDelete from './BtnDelete.vue'; 
 	// props
- 	const props = defineProps({
-		title: {
-			type: String,
-			default: 'lista'
-		},
-		listContact: {
-			type: Array,
-			default: []
-		}
- })
+	const props = defineProps({
+			title: {
+				type: String,
+				default: 'lista'
+			},
+	})
+	// state composables
+	const { contactList, msjEmpy, showEmpy } = useListaContacs()
+
+	// watchers
+	//  watch(contactList, (newValue, oldValue) => {
+	// 	console.log(newValue, oldValue)
+	// 	showEmpy('No se encontro resultados')
+	//  })
+
+	watchEffect(() => {
+		console.log(contactList.value)
+		showEmpy('No se encontro resultados')
+	})
+
  // methods
  const totalRecompesa = computed(() => {
-	return props.listContact.reduce(
+	return contactList.value.reduce(
 		(accumulator, contact) => accumulator + contact.recompensa, 0
 	)
  })
 
  const totalRecompesas = () => {
-		return props.listContact.reduce(
+		return contactList.value.reduce(
 			(accumulator, contact) => accumulator + contact.recompensa, 0
 		)
  }
@@ -39,7 +50,7 @@
 				<th>acccion</th>
 			</thead>
 			<tbody>
-				<tr v-for="contact in listContact">
+				<tr v-for="contact in contactList">
 					<td class="p-3 border-b-2">{{ contact.id }}</td>
 					<td class="p-3 border-b-2">{{ contact.name }}</td>
 					<td class="p-3 border-b-2">{{ contact.phone }}</td>
@@ -51,5 +62,6 @@
 				</tr>
 			</tbody>
 		</table>
+		<p class="text-red-800">{{ msjEmpy }}</p>
 	</div>
 </template>
